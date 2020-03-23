@@ -1,7 +1,7 @@
 FROM alanfranz/fpm-within-docker:centos-7
 
 ENV NAME "php72t-pecl-tdlib"
-ENV VERSION "0.0.9"
+ENV VERSION "0.0.10"
 ENV ITERATION "1.vortex.el7.centos"
 
 RUN mkdir /pkg
@@ -14,13 +14,13 @@ ENV PATH /opt/rh/devtoolset-7/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/s
 
 RUN git clone --recurse-submodules https://github.com/yaroslavche/phptdlib.git
 
-WORKDIR /pkg/phptdlib 
+WORKDIR /pkg/phptdlib
 RUN git checkout ${VERSION}
 RUN mkdir build
 
 WORKDIR /pkg/phptdlib/build
 RUN cmake3 ..
-RUN make
+RUN make -j $(nproc)
 
 RUN make install
 
